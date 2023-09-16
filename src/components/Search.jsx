@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import { callAPI } from '../utils/CallApi'
+import { useNavigate, createSearchParams } from 'react-router-dom'
 
 const Search = () => {
     const [suggestions, setSuggestions] = useState(null)
     const [searchTerm, setSearchTerm] = useState("")
     const [category, setCategory] = useState("All")
+
+    const navigate = useNavigate()
+
+    const onHandleSubmit = (e) => {
+        e.preventDefault()
+
+        navigate({
+            pathname: "search",
+            search: `${createSearchParams({
+                category: `${category}`,
+                searchTerm: `${searchTerm}`
+            })
+                }`
+        })
+
+        setSearchTerm("")
+        setCategory("All")
+    }
 
     const getSuggestions = () => {
         callAPI(`data/suggestions.json`)
@@ -51,7 +70,8 @@ const Search = () => {
                         })
                             .slice(0, 10)
                             .map((suggestion) => (
-                                <div key={suggestion.id} onClick={() => setSearchTerm(suggestion.title)}>
+                                <div className='hover:bg-yellow-500 cursor-pointer transition'
+                                    key={suggestion.id} onClick={() => setSearchTerm(suggestion.title)}>
                                     {suggestion.title}
                                 </div>
                             ))
