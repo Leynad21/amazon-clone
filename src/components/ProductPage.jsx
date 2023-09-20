@@ -69,8 +69,7 @@ const ProductPage = () => {
                             </select>
                         </div>
                         <Link to={"/checkout"}>
-                            <button onClick={() => dispatch(addToCart(addQuantityToProduct()))} className='bg-yellor-400 w-full p-3 text-xs xl:text-sm rounded 
-                            hover:bg-yellow-500 mt-3'>
+                            <button onClick={() => dispatch(addToCart(addQuantityToProduct()))} className='btn'>
                                 Add to cart
                             </button>
                         </Link>
