@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { callAPI } from '../utils/CallApi'
 import ProductDetails from './ProductDetails'
 import { EURO_CURRENCY } from '../utils/constants'
+import { addToCart } from '../features/cart/cartSlice'
 
 const ProductPage = () => {
 
     const { id } = useParams()
+    const dispatch = useDispatch()
 
     const [product, setProduct] = useState(null)
+    const [quantity, setQuantity] = useState("1")
+
 
     const getProduct = () => {
         callAPI(`data/products.json`)
             .then((productResults) => {
                 setProduct(productResults[id])
             })
+    }
+
+    const addQuantityToProduct = () => {
+        setProduct(product.quantity = quantity)
+        return product
     }
 
     useEffect(() => {
@@ -52,16 +62,18 @@ const ProductPage = () => {
                         <div className='text-sm xl:text-base text-blue-500 font-semibold mt-1'>FREE Delivery</div>
                         <div className='text-base xl:text-lg text-green-700 font-semibold mt-1'>In Stock</div>
                         <div className='text-base xl:text-lg mt-1'>Quantity
-                            <select className='p-2 bg-white border rounded-md focus:border-indigo-600'>
+                            <select onChange={(e) => setQuantity(e.target.value)} className='p-2 bg-white border rounded-md focus:border-indigo-600'>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
                             </select>
                         </div>
-                        <button className='bg-yellor-400 w-full p-3 text-xs xl:text-sm rounded 
-                        hover:bg-yellow-500 mt-3'>
-                            Add to cart
-                        </button>
+                        <Link to={"/checkout"}>
+                            <button onClick={() => dispatch(addToCart(addQuantityToProduct()))} className='bg-yellor-400 w-full p-3 text-xs xl:text-sm rounded 
+                            hover:bg-yellow-500 mt-3'>
+                                Add to cart
+                            </button>
+                        </Link>
                     </div>
                 </div>
 
